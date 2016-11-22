@@ -1,4 +1,4 @@
-var photoArray = [];
+
 function loadGallery() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=957e16d5a25f509d2605e4dc31d2ae80&photoset_id=72157669178415344&user_id=65381082%40N05&format=json&nojsoncallback=1');
@@ -9,10 +9,11 @@ function loadGallery() {
     var content = document.getElementById('content');
     var next = document.getElementById('next');
     var previous = document.getElementById('previous');
+    var close = document.getElementById('close');
     if (xhr.readyState === DONE) {
       if (xhr.status === OK) {
         var data = JSON.parse(xhr.response);
-        photoArray = data.photoset.photo;
+        var photoArray = data.photoset.photo;
         for(var i = 0; i < photoArray.length; i++) {
           var img = document.createElement("img");
           var imgId = photoArray[i].id;
@@ -34,6 +35,7 @@ function loadGallery() {
         }
         next.addEventListener("click", function(e){showNext(e, photoArray)},false);
         previous.addEventListener("click", function(e){showPrev(e, photoArray)},false);
+        close.addEventListener("click", function(){closeImage()},false);
       } else {
         console.log('Error: ' + xhr.status); // An error occurred during the request.
       }
@@ -63,7 +65,7 @@ function showImage(e) {
   cover.style.visibility='visible';
 }
 
-document.getElementById("close").onclick = function() { 
+function closeImage() { 
   coverimage.setAttribute("src", "");
   coverimage.setAttribute("alt", "");
   var overlay = document.getElementById("overlay");
